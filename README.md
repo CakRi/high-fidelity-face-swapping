@@ -24,7 +24,7 @@ This report outlines an enhanced face-swapping pipeline developed to improve upo
 
 ## 1. Introduction
 
-Face swapping is a sophisticated computer vision technique designed to take a target image and replace its facial features with the identity of a source image, all while keeping the target's non-identity attributes—such as expression, pose, lighting, and background—intact. The fundamental challenge in this domain is resolving the conflict between identity transfer strength and attribute preservation.
+Face swapping is a sophisticated computer vision technique designed to take a target image and replace its facial features with the identity of a source image, all while keeping the target's non-identity attributes (such as expression, pose, lighting, and background) intact. The fundamental challenge in this domain is resolving the conflict between identity transfer strength and attribute preservation.
 
 In our project, we utilize SimSwap [1] as the baseline architecture. SimSwap relies on an ID Injection module to embed the source identity into the generator's feature space and a Feature Matching Loss to preserve the target attributes. However, the baseline study reveals a core limitation: SimSwap deliberately settles for a competitive identity performance (achieving 92.8% ID retrieval compared to competing software reaching 97.4%) in order to prioritize the preservation of target attributes.
 
@@ -43,7 +43,7 @@ In our project, we utilize SimSwap [1] as the baseline architecture. SimSwap rel
 
 Previous state-of-the-art frameworks, including the standard SimSwap architecture, fundamentally depend on generalized facial recognition networks such as ArcFace [2] to extract identity embeddings. While highly effective for general identification, these standard extractors respond to a combination of facial geometry and external appearance characteristics like skin tone, hair, and ambient lighting.
 
-**Limitations of Previous Methods:** This combination leads to a phenomenon known as *identity bypass*. When the generator attempts to minimize the identity loss, the easiest mathematical path is often to copy the source person's appearance (coloration and lighting) into the result rather than transferring the actual structural geometry. Replacing ArcFace with CurricularFace—a stronger variant better at discriminating between similar-looking people—did not resolve the issue; the model still found the appearance-copying shortcut, resulting in a mere lighting adjustment rather than true geometric transfer.
+**Limitations of Previous Methods:** This combination leads to a phenomenon known as *identity bypass*. When the generator attempts to minimize the identity loss, the easiest mathematical path is often to copy the source person's appearance (coloration and lighting) into the result rather than transferring the actual structural geometry. Replacing ArcFace with CurricularFace (a stronger variant better at discriminating between similar-looking people) did not resolve the issue; the model still found the appearance-copying shortcut, resulting in a mere lighting adjustment rather than true geometric transfer.
 
 **Why our method is better:** Our enhanced pipeline specifically targets and resolves this bypass through two main avenues. First, through exploration of purely geometric extractors like BlendFace. Second, and more importantly, our finalized approach bypasses the rigid limitations of the pretrained generator by introducing *Balanced Metric-Guided Partial Fine-Tuning*. By freezing the global generator and updating only the AdaIN-related injection parameters under strict edge-preservation and baseline-preservation constraints, we force the network to adapt geometric structure without leaking source appearance.
 
@@ -151,7 +151,7 @@ Furthermore, we achieved a $100\%$ success rate in watermark extraction logic. D
 In conclusion, we proposed and successfully implemented a comprehensive refinement pipeline to elevate the quality of face-swapping capabilities. The method leverages three central optimization modules:
 
 1. **Partial Fine-Tuning** improves source identity preservation efficiently by exclusively updating identity-injection parameters via targeted loss functions.
-2. **High-Frequency Enhancement** successfully injects critical facial details—such as eye structure, skin texture, and mouth contours—while effectively blocking identity degradation and spatial drift via strict algorithmic gating.
+2. **High-Frequency Enhancement** successfully injects critical facial details (such as eye structure, skin texture, and mouth contours) while effectively blocking identity degradation and spatial drift via strict algorithmic gating.
 3. **Visual Harmonization** successfully cleans up the final image representation by reducing boundary artifacts and harmonizing skin tones.
 
 Overall, this combined architecture produces a sharper, more visually consistent face-swapping result with stronger ID retrieval and lower pose error compared to the pretrained SimSwap baseline, all while embedding an ethical dual-layer traceability watermark.
